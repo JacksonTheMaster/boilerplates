@@ -1,0 +1,1 @@
+regsvr32 Microsoft.Teams.AddinLoader.dll
