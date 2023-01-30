@@ -1,6 +1,7 @@
+sudo -i
 apt-get update
 apt-get upgrade
-apt-get autoremove
+apt-get autoremove -y
 NFS_SERVER="10.10.50.75"
 NFS_SHARE="/mnt/cache-00/cache-gdrive/jmg-hel-swarm-00"
 MOUNT_POINT="/nfs"
