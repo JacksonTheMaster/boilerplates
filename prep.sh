@@ -11,3 +11,4 @@ mkdir /nfs
 # Mount NFS share persistently
 echo "$NFS_SERVER:$NFS_SHARE $MOUNT_POINT nfs defaults 0 0" | sudo tee -a /etc/fstab
 sudo mount -a
+echo "Task OK"
