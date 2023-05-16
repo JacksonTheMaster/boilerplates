@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+      - 8082:8082
+    environment:
+      - HETZNER_API_KEY=YOUR_API_KEY
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /pathToStorage/traefik/traefik.yml:/traefik.yml:ro
+      - /pathToStorage/traefik/config.yml:/config.yml:ro
+      - /pathToStorage/traefik/cert.crt:/crt/cert.crt:ro
+      - /pathToStorage/traefik/cert.key:/crt/cert.key:ro
+      - /pathToStorage/traefik/acme.json:/crt/acme.json:rw #chmod 600 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`in.ssl-proxy.domain.tld`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=User:$$4n57nn57n867$$t5gv//F5$$745n4n3.67n54.n57547n74n7/"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`in.ssl-proxy.domain.tld`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=ssl-proxy.domain.tld"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.ssl-proxy.domain.tld"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
+networks:
+  proxy:
+    external: true 
+    #create first

@@ -1,0 +1,89 @@
+http:
+#routers
+  routers:
+    domain.tld: 
+      entryPoints:
+        - "https"
+      rule: "Host(`www.domain.tld`)"
+      middlewares:
+        - default-headers
+        - catchall-errorpage
+      tls:
+        certResolver: letsencrypt
+      service: service
+
+    catch-all:
+      entryPoints:
+        - "https"
+      rule: "HostRegexp(`{subdomain:[a-z]+}.domain1.tld`, `{subdomain:[a-z]+}.domain2.tld`, `{subdomain:[a-z]+}.domain3.tld`, `{subdomain:[a-z]+}.{subdomain:[a-z]+}.domain4.tld`)"
+      middlewares:
+        - catchall-errorpage
+      tls: {}
+      priority: 1
+      service: error
+
+#services
+  services:
+    service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.10.10:8080"
+        passHostHeader: false
+    error:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.10.10:8081"
+        passHostHeader: false
+
+#middleware
+  middlewares:
+    catchall-errorpage:
+      errors:
+        status:
+          - "400-599"
+        service: error
+        query: "/{status}.html"
+    addprefix:
+      addPrefix:
+        prefix: "/pefix"
+    https-redirect:
+      redirectScheme:
+        scheme: https
+
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "10.10.10.10/8"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
+
+
+
+pilot:
+    token: ""
+
+#tls:
+  #stores:
+    #default:
+      #defaultCertificate:
+        #certFile: /crt/cert.crt
+        #keyFile: /crt/cert.key

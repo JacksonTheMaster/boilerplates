@@ -1,0 +1,33 @@
+api:
+  dashboard: true
+  debug: true
+  insecure: true
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  metrics:
+    address: ":8082"
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+    entryPoint: metrics
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  file:
+    filename: /config.yml
+    watch: true
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: info@domain.tld
+      storage: /crt/acme.json
+      dnsChallenge:
+        provider: hetzner
+        delayBeforeCheck: "0"
+log:
+  level: DEBUG
