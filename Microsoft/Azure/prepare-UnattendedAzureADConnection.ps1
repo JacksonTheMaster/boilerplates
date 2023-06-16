@@ -1,6 +1,6 @@
 <#  
 #   
-#   This Script will prepare a client pc/server and an Azure AD to allow unattended script logins in AAD and ExchangeOnline to automate user onboardings
+#   This Script will prepare a client pc/server and an Azure AD to allow unattended script logins in AAD and ExchangeOnline
 #   by
 #    1) creating a self signed cert, converting it to an X509Certificate and save it in local machine private certs
 #    2) creating a new Azure AD Application and binding the certificate to it 
@@ -60,4 +60,4 @@ Add-AzureADDirectoryRoleMember -ObjectId $roleId_exchangeAdmin -RefObjectId $sp.
 Add-AzureADDirectoryRoleMember -ObjectId $roleId_userAdministrator -RefObjectId $sp.ObjectId
     
 # Remove temp private certificate because it's no longer needed
-rm $CertificatePath
+Remove-Item $CertificatePath
