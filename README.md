@@ -1,7 +1,7 @@
 ---
 > ## ⚠️DEPRECATED⚠️
 > 
-> **Note**: This documentation has moved. Please refer to [the new documentation site](https://docs.jmg-it.de/).
+> **Note**: This documentation has moved. Please refer to [the new documentation site](https://docs.jmg-it.de/), wich is still WIP!
 ---
 
 To run a bash script from this repo, run it like this with the "raw" link.
