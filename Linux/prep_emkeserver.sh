@@ -75,6 +75,30 @@ else
     error_message "Failed to configure SSH."
 fi
 
+# Install Fish shell
+progress_message "Installing Fish shell..."
+if sudo apt install -y fish; then
+    success_message "Fish shell installed successfully."
+else
+    error_message "Failed to install Fish shell."
+fi
+
+# Set Fish shell as default and configure greeting
+progress_message "Setting Fish as default shell and configuring greeting..."
+if chsh -s /usr/bin/fish && echo "set fish_greeting 'Emke'" | sudo tee -a /etc/fish/config.fish; then
+    success_message "Fish shell set as default and greeting configured."
+else
+    error_message "Failed to set Fish as default shell or configure greeting."
+fi
+
+# Switch to Fish shell
+progress_message "Switching to Fish shell..."
+if exec fish; then
+    success_message "Switched to Fish shell."
+else
+    error_message "Failed to switch to Fish shell."
+fi
+
 # Final message
 success_message "System setup complete!"
 warning_message "Please review the output above for any errors."
