@@ -29,26 +29,51 @@ function warning_message {
 
 # Update the system
 progress_message "Updating the system..."
-sudo apt update && sudo apt upgrade -y && success_message "System updated successfully." || error_message "Failed to update the system."
+if sudo apt update && sudo apt upgrade -y; then
+    success_message "System updated successfully."
+else
+    error_message "Failed to update the system."
+fi
 
 # Install useful command line tools
 progress_message "Installing command line tools..."
-sudo apt install -y htop curl vim git net-tools && success_message "Command line tools installed successfully." || error_message "Failed to install command line tools."
+if sudo apt install -y htop curl vim git net-tools; then
+    success_message "Command line tools installed successfully."
+else
+    error_message "Failed to install command line tools."
+fi
 
 # Install Docker using the convenience script
-progress_message "Installing Docker..."
-curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh && success_message "Docker installed successfully." || error_message "Failed to install Docker."
-rm get-docker.sh
+progress_message "Downloading Docker installation script..."
+if curl -fsSL https://get.docker.com -o get-docker.sh; then
+    progress_message "Installing Docker..."
+    if sudo sh get-docker.sh; then
+        success_message "Docker installed successfully."
+        rm get-docker.sh
+    else
+        error_message "Failed to install Docker."
+    fi
+else
+    error_message "Failed to download Docker installation script."
+fi
 
 # Enable Docker to start on boot
 progress_message "Enabling Docker to start on boot..."
-sudo systemctl enable docker && success_message "Docker enabled to start on boot." || error_message "Failed to enable Docker to start on boot."
+if sudo systemctl enable docker; then
+    success_message "Docker enabled to start on boot."
+else
+    error_message "Failed to enable Docker to start on boot."
+fi
 
 # Enable SSH login with password for all users
 progress_message "Configuring SSH for password authentication..."
-sudo sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sudo sed -i 's/^PasswordAuthentication no/#PasswordAuthentication no/' /etc/ssh/sshd_config
-sudo systemctl restart sshd && success_message "SSH configured for password authentication." || error_message "Failed to configure SSH."
+if sudo sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+   sudo sed -i 's/^PasswordAuthentication no/#PasswordAuthentication no/' /etc/ssh/sshd_config && \
+   sudo systemctl restart sshd; then
+    success_message "SSH configured for password authentication."
+else
+    error_message "Failed to configure SSH."
+fi
 
 # Final message
 success_message "System setup complete!"
