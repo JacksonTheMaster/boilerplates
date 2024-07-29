@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Update and upgrade packages
+apt update && apt upgrade -y
+
+# Remove SSH host keys
+rm -f /etc/ssh/ssh_host_*
+
+# Clean up persistent network interface rules
+rm -f /etc/udev/rules.d/70-persistent-net.rules
+
+# Clean cloud-init data
+cloud-init clean
+
+# Clear machine ID
+truncate -s 0 /etc/machine-id
+rm /var/lib/dbus/machine-id
+ln -s /etc/machine-id /var/lib/dbus/machine-id
+
+echo "Cleanup completed. You can now shutdown the VM and convert it to a template."
