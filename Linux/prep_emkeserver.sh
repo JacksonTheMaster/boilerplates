@@ -65,4 +65,13 @@ fi
 success_message "System setup complete!"
 warning_message "Please review the output above for any errors."
 
-echo -e "${YELLOW}==> Rebooting the system is recommended to apply all changes.${NC}"
+echo -e "${YELLOW}==> Rebooting the system to apply all changes.${NC}"
+sleep 1
+echo -e "${YELLOW}==> 3.${NC}"
+sleep 3
+echo -e "${YELLOW}==> 2.${NC}"
+sleep 2
+echo -e "${YELLOW}==> 1.${NC}"
+sleep 2
+echo -e "${YELLOW}==> rebooting.${NC}"
+sudo reboot
