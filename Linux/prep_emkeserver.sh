@@ -46,23 +46,9 @@ fi
 # Install Docker using the convenience script
 progress_message "Downloading Docker installation script..."
 if curl -fsSL https://get.docker.com -o get-docker.sh; then
-    progress_message "Installing Docker..."
-    if sudo sh get-docker.sh; then
-        success_message "Docker installed successfully."
-        rm get-docker.sh
-    else
-        error_message "Failed to install Docker."
-    fi
+     success_message "Docker script downloaded successfully."
 else
     error_message "Failed to download Docker installation script."
-fi
-
-# Enable Docker to start on boot
-progress_message "Enabling Docker to start on boot..."
-if sudo systemctl enable docker; then
-    success_message "Docker enabled to start on boot."
-else
-    error_message "Failed to enable Docker to start on boot."
 fi
 
 # Enable SSH login with password for all users
