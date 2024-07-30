@@ -37,7 +37,7 @@ fi
 
 # Install useful command line tools
 progress_message "Installing command line tools..."
-if sudo apt install -y htop curl vim git net-tools; then
+if sudo apt install -y htop curl vim git net-tools nfs-utils; then
     success_message "Command line tools installed successfully."
 else
     error_message "Failed to install command line tools."
