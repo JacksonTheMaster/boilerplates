@@ -1,54 +1,26 @@
-#!/bin/bash
+sudo rm -rf /usr/local/go
+Download the Latest Go Version: Visit the Go Downloads page to confirm the latest version and replace go1.xx.x below with the latest version:
 
-# Define variables
-GO_VERSION="1.23.3"  # Replace with the desired Go version
-GO_URL="https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz"
-GO_INSTALL_DIR="/usr/local"
+bash
+Copy code
+wget https://go.dev/dl/go1.23.3.linux-amd64.tar.gz
+Extract the New Go Version: Extract the downloaded archive into /usr/local:
 
-# Update system packages
-echo "Updating system packages..."
-sudo apt update && sudo apt upgrade -y
+bash
+Copy code
+sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+Update PATH (if necessary): Ensure your PATH environment variable includes /usr/local/go/bin. Add this line to your ~/.profile or ~/.zshrc:
 
-# Install prerequisites
-echo "Installing prerequisites..."
-sudo apt install -y wget tar iperf3
+bash
+Copy code
+export PATH=$PATH:/usr/local/go/bin
+Reload the profile:
 
-# Remove any existing Go installation
-if [ -d "$GO_INSTALL_DIR/go" ]; then
-  echo "Removing existing Go installation..."
-  sudo rm -rf "$GO_INSTALL_DIR/go"
-fi
+bash
+Copy code
+source ~/.profile
+Verify the Installed Version: Confirm the new version of Go is installed:
 
-# Download and install Go
-echo "Downloading and installing Go $GO_VERSION..."
-wget -q "$GO_URL" -O /tmp/go${GO_VERSION}.linux-amd64.tar.gz
-sudo tar -C "$GO_INSTALL_DIR" -xzf /tmp/go${GO_VERSION}.linux-amd64.tar.gz
-rm /tmp/go${GO_VERSION}.linux-amd64.tar.gz
-
-# Add Go to PATH if not already present
-if ! grep -q "/usr/local/go/bin" ~/.profile; then
-  echo "Adding Go to PATH..."
-  echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.profile
-  source ~/.profile
-fi
-
-# Verify Go installation
-echo "Verifying Go installation..."
-if go version; then
-  echo "Go $GO_VERSION installed successfully."
-else
-  echo "Go installation failed."
-  exit 1
-fi
-
-# Install iperf3
-echo "Installing iperf3..."
-if iperf3 --version; then
-  echo "iperf3 installed successfully."
-else
-  echo "iperf3 installation failed."
-  exit 1
-fi
-
-# Final message
-echo "Installation completed. You can use 'go version' to check Go and 'iperf3 --version' to check iperf3."
+bash
+Copy code
+go version
